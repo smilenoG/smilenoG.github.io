@@ -80,7 +80,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/25/以前/">以前的笔记</a>
+      <a class="article-title" href="/2018/11/25/以前/">react的路由</a>
     </h1>
   
 
@@ -88,13 +88,101 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>#生命周期流程:<br>    实例化 -&gt;  存在期(更新期)  -&gt; 销毁时<br>    实例化:<br>        es5:<br>            1.取得默认属性(getDefaultProps) 外部传入的props<br>            2.初始状态(getInitailState)  state状态<br>            3.即将挂载 componentWillMount<br>            4.描画DOM  render<br>            5.挂载完毕 componentDidMount<br>        es6:<br>            1.取得默认属性(getDefaultProps) 外部传入的props<br>            2.初始状态(getInitailState)  state状态<br>                1 &amp;&amp; 2 都在构造器里面完成<br>                constructor(props){<br>                    super(props) == getDefaultProps<br>                    this.state={} == getInitailState<br>                }<br>            3.即将挂载 componentWillMount<br>            4.描画VDOM  render<br>            5.挂载完毕 componentDidMount<br>    存在期:<br>        0.props改变 componentWillReceiveProps(nextProps)<br>            初始化render时不执行 这里调用更新状态是安全的，并不会触发额外的render调用<br>            nextProps 更新后  this.props更新前<br>        1.是否更新 shouldComponentUpdate  指视图<br>        2.即将更新 componentWillUpdate<br>        3.描画dom  render<br>        4.描画结束 componentDidUpdate<br>    销毁时:<br>        即将卸载 componentWillUnmount<br>        可以做一些组件相关的清理工作，例如取消计时器、网络请求等</p>
+<p>实例化-&gt;存在(更新)-&gt;销毁时<br>    getDefaultProps-&gt;getInitialState-&gt;componentWillMount-&gt;render-&gt;componentDidMount<br>    -&gt;shouldComponentUpdate-&gt;componentWillUpdate-&gt;render-&gt;componentDidUpdate-&gt;<br>    -&gt;componentWillUnmount</p>
+<p>##数据交互：<br>    ajax: 手动封装(XMLHttpRequest)|$.ajax<br>    promise: react-resource|axios|new Promise|fetch|async+await</p>
+<p>##fetch:</p>
+<pre><code>官方脚手架 静态数据读取时，参考根指向public  &apos;/data&apos; == public/data
+fetch    原生就有
+fetch(url+数据,{配置}).then(成功函数(res),失败函数(err)).catch(失败函数(err))
+res.ok -&gt; true/false 成功/失败
+res.status - &gt; 状态码
+res.body 数据 数据流(stream)
+res.text() 转换 文本(string)
+    过程异步：    return res.text()
+    同步： res.text().then((data)=&gt;{})    data:转换后的数据
+res.json() 转  对象
+配置:
+    method:&apos;POST&apos;
+    headers:{&quot;Content-type&quot;:&quot;application/x-www-form-urlencoded&quot;},
+    body:&apos;a=1&amp;b=2&apos;|{a:1,b:2}
+</code></pre><hr>
+<p>jsonp:  fetch不带jsonp请求  需要依赖第三库<br>    npm install fetch-jsonp -D<br>    import xxx from ‘xxx’<br>    用法:<br>        fetchJsonp(url+数据,{配置}).then(success(res)).catch(error)<br>        特点: 是个promise 返回promise 数据是个流<br>        解析：res.json()  -&gt; 流转换数据 是异步<br>        配置:<br>            timeout: 延时  5000<br>            jsonpCallback: 回调函数key callback<br>            jsonpCallbackFunction: null</p>
+<p>思想:<br>    组件拆分目标:为了复用<br>    组件如何拆：单一原则<br>    状态应该给谁:<br>        尽量给顶层组件(状态提升),-&gt;props-&gt;子组件<br>        可以从 props(属性) 或者 state(状态) 得到，那么它可能不应该在 state(状态) 中<br>        方法-》操作数据(数据|状态在哪，方法就应该在哪)<br>    props取名：从组件本身的角度来命名, 而不是它被使用的上下文环境<br>    纯函数:不会试图改变它们的输入，并且对于同样的输入,始终可以得到相同的结果,React<br>    组件都必须是纯函数，并禁止修改其自身 props<br>        function(a,b){不会随机，不会修改a和b的值，输出可控}<br>    setState: 是异步的,会将多个 setState() 调用合并为一次更新,所以不能同步依赖上一个setState的值，作为下一个setState的参数<br>        解决：<br>            1) this.setState(function(prevState,props){})<br>              prevState 抓取之前this.setState的所有状态<br>              props 所有属性<br>              更新会被合并,浅合并<br>            2) 函数节流(异步操作)<br>            3) ev.target……</p>
+<hr>
+<p>##无状态(没有state)组件（简写）创建：</p>
+<pre><code>const 组件名=(props)=&gt;(jsx)
+const 组件名=props=&gt;jsx
+const 组件名=(props)=&gt;{
+    let xx=props.xx
+    return jsx
+}
+</code></pre><p>无状态组件特点：<br>    不能访问this对象(this.ref,this.state  … )<br>    只能访问props<br>    无需实例化，渲染性能高<br>    this.方法/钩子（生命周期)  也不需要</p>
+<p>订阅发布:</p>
+<p>pub/sub模式 消息通知(观察者模式)  pm install pubsub-js -D<br>        订阅:    onUserAdd=pubsub.subscribe(‘消息名’,回调函数(数据,’消息名’))<br>        发布：  pubsub.publish(‘消息名’,数据)<br>        清除指定订阅：pubsub.unsubscribe(onUserAdd);<br>        清除所有：pubsub.unsubscribeAll()</p>
+<hr>
+<p>#react路由 4.x<br>    资料：<br>        API:<a href="https://reacttraining.com/react-router/web/guides/quick-start" target="_blank" rel="noopener">https://reacttraining.com/react-router/web/guides/quick-start</a><br>        CN：<a href="http://blog.csdn.net/sinat_17775997/article/details/77411324" target="_blank" rel="noopener">http://blog.csdn.net/sinat_17775997/article/details/77411324</a><br>        redux：<a href="https://github.com/reacttraining/react-router/tree/master/packages/react-router-redux" target="_blank" rel="noopener">https://github.com/reacttraining/react-router/tree/master/packages/react-router-redux</a><br>    区别：<br>        V4<br>            嵌套式路由（路由配置在组件内部），动态路由，包容性（多路由渲染）<br>            舍去了路由钩子<br>        V3<br>            分离式（统一位置配置），静态路由，排他性（只有一个路由被渲染）<br>    理念：<br>        遵循Just Component的 API 设计理念 万物皆组件，路由规则位于布局和 UI 本身之间</p>
+<pre><code>安装引入 react-router-dom
+
+React Router被拆分成三个包：react-router,react-router-dom和react-router-native。react-        router提供核心的路由组件与函数。其余两个则提供运行环境（即浏览器与react-native）所需的特定组件
+
+BrowserRouter 使用 HTML5 提供的 history API 来保持 UI 和 URL 的同步
+HashRouter 使用 URL 的 hash (例如：window.location.hash) 来保持 UI 和URL 的同步
+
+结构：
+    BrowserRouter|HashRouter 路由对象
+        根组件(App)|其他组件
+            NavLink|Link  导航
+            Route    匹配+展示
+            Redirect 跳转
+            404 &lt;Redirect to=&quot;/error&quot;/&gt;
+            默认路由 &lt;Route exact path={match.path} render={fuc}
+Route 属性
+    path（string）: 路由匹配路径。（没有path属性的Route 总是会 匹配）；
+    exact（bool）：
+        为true时，要求全路径匹配(/home)。V4 的路由默认为“包含”的(/和/home都匹配)，这意味着多个 &lt;Route&gt; 可以同时进行匹配和渲染
+
+    component：在地址匹配的时候React的组件才会被渲染，route props也会随着一起被渲染
+    render：这种方式对于内联渲染和包装组件却不引起意料之外的重新挂载特别方便
+Link：
+    to：string/object：要跳转的路径或地址；
+NavLink：是&lt;Link&gt; 的一个特定版本
+    activeClassName（string）：设置选中样式，默认值为 active；
+    activeStyle（object）：当元素被选中时, 为此元素添加样式；
+Switch：该组件用来渲染匹配地址的第一个&lt;Route&gt;或者&lt;Redirect&gt;，仅渲染一个路由，排他性路由,默认全匹配(场景：侧边栏和面包屑，引导选项卡等
+Redirect:
+    &lt;Redirect to=&apos;/home&apos;/&gt; 总是会被重定向
+404:    &lt;Route component={Error}/&gt; 总是会匹配
+
+参数数据：{history,location,match}==props
+    传递：
+        to={match.url+&apos;/001&apos;}
+        to={`${match.url}/002?a=1&amp;b=2`}
+        to={{pathname:match.url+'/003',search:'?a=11&b=12',hash:'#a1'}}
+        &lt;Route path={match.path+&apos;/:aid&apos;} component={Detail}
+            注意：
+                url - (浏览器 URL 中的实际路径) URL 匹配的部分。 用于构建嵌套的 &lt;Link&gt;
+                path - (路由编写的路径) 用于匹配路径模式。用于构建嵌套的 &lt;Route&gt;
+    接收：
+        接参数:{match.params.aid}
+        接数据:{location.search}
+        接地址:{location.pathname}
+    注意：
+        无法从v4 中获取 URL 的查询字符串了。因为没有关于如何处理复杂查询字符串的标准。所以，作者让开发者去选择如何处理查询字符串。推荐query-string库
+跳转：
+    history.push(&apos;/user?a=1&amp;b=2&apos;)
+    history.push({pathname:&apos;/user&apos;,search:&apos;?a=11&amp;b=22&apos;})
+    history.replace({pathname:&apos;/user&apos;,search:&apos;?a=111&amp;b=222&apos;})
+    history.go(-1)
+</code></pre>
       
     </div>
     <footer class="article-footer">
       <a data-url="http://yoursite.com/2018/11/25/以前/" data-id="cjowdv4g90004woul8isgu3u5" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/v4-0的使用/">v4.0的使用</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生命周期/">生命周期</a></li></ul>
+
     </footer>
   </div>
   
@@ -389,7 +477,7 @@ this.setState({[ev.target.name]:ev.target.value})
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/秘密/">秘密</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/练习/">练习</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/v4-0的使用/">v4.0的使用</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生命周期/">生命周期</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/秘密/">秘密</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/练习/">练习</a></li></ul>
     </div>
   </div>
 
@@ -399,7 +487,7 @@ this.setState({[ev.target.name]:ev.target.value})
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/测试/" style="font-size: 20px;">测试</a> <a href="/tags/秘密/" style="font-size: 20px;">秘密</a> <a href="/tags/练习/" style="font-size: 10px;">练习</a>
+      <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/v4-0的使用/" style="font-size: 10px;">v4.0的使用</a> <a href="/tags/测试/" style="font-size: 20px;">测试</a> <a href="/tags/生命周期/" style="font-size: 10px;">生命周期</a> <a href="/tags/秘密/" style="font-size: 20px;">秘密</a> <a href="/tags/练习/" style="font-size: 10px;">练习</a>
     </div>
   </div>
 
@@ -421,7 +509,7 @@ this.setState({[ev.target.name]:ev.target.value})
       <ul>
         
           <li>
-            <a href="/2018/11/25/以前/">以前的笔记</a>
+            <a href="/2018/11/25/以前/">react的路由</a>
           </li>
         
           <li>
