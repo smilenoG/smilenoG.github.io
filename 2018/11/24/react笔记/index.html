@@ -5,18 +5,18 @@
   
   <title>react笔记 | 王观的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="基础React就是函数的编程和嵌套this.state就是改变model层改变不了视图层 this.setstate修改model层 视图层也响应 #组件组件的state，相当于组件的记忆，其存在意义就是被改变，每一次通过this.setState函数修改state就改变了组件的状态，然后通过渲染过程把这种变化体现出来Constructor 构造器跑在所有程序之前,所以可以在构造器中改变state">
+  <meta name="description" content="基础React就是函数的编程和嵌套this.state就是改变model层改变不了视图层 this.setstate修改model层 视图层也响应语法要求：    标签要闭合    元素必须要有一个顶层元素    变量首字母大写代表组件，小写对应是jsx元素    html属性，小驼峰命名 tabindex -&amp;gt; tabIndex 精髓：多组件组合，jsx+函数式编程（运算写成一系列的函数嵌">
 <meta name="keywords" content="秘密">
 <meta property="og:type" content="article">
 <meta property="og:title" content="react笔记">
 <meta property="og:url" content="http://yoursite.com/2018/11/24/react笔记/index.html">
 <meta property="og:site_name" content="王观的博客">
-<meta property="og:description" content="基础React就是函数的编程和嵌套this.state就是改变model层改变不了视图层 this.setstate修改model层 视图层也响应 #组件组件的state，相当于组件的记忆，其存在意义就是被改变，每一次通过this.setState函数修改state就改变了组件的状态，然后通过渲染过程把这种变化体现出来Constructor 构造器跑在所有程序之前,所以可以在构造器中改变state">
+<meta property="og:description" content="基础React就是函数的编程和嵌套this.state就是改变model层改变不了视图层 this.setstate修改model层 视图层也响应语法要求：    标签要闭合    元素必须要有一个顶层元素    变量首字母大写代表组件，小写对应是jsx元素    html属性，小驼峰命名 tabindex -&amp;gt; tabIndex 精髓：多组件组合，jsx+函数式编程（运算写成一系列的函数嵌">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-25T03:45:24.501Z">
+<meta property="og:updated_time" content="2018-11-26T06:38:47.767Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="react笔记">
-<meta name="twitter:description" content="基础React就是函数的编程和嵌套this.state就是改变model层改变不了视图层 this.setstate修改model层 视图层也响应 #组件组件的state，相当于组件的记忆，其存在意义就是被改变，每一次通过this.setState函数修改state就改变了组件的状态，然后通过渲染过程把这种变化体现出来Constructor 构造器跑在所有程序之前,所以可以在构造器中改变state">
+<meta name="twitter:description" content="基础React就是函数的编程和嵌套this.state就是改变model层改变不了视图层 this.setstate修改model层 视图层也响应语法要求：    标签要闭合    元素必须要有一个顶层元素    变量首字母大写代表组件，小写对应是jsx元素    html属性，小驼峰命名 tabindex -&amp;gt; tabIndex 精髓：多组件组合，jsx+函数式编程（运算写成一系列的函数嵌">
   
     <link rel="alternate" href="/atom.xml" title="王观的博客" type="application/atom+xml">
   
@@ -91,11 +91,110 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><p>React就是函数的编程和嵌套this.state就是改变model层改变不了视图层 this.setstate修改model层 视图层也响应</p>
-<p>#组件<br>组件的state，相当于组件的记忆，其存在意义就是被改变，每一次通过this.setState函数修改state就改变了组件的状态，然后通过渲染过程把这种变化体现出来<br>Constructor 构造器跑在所有程序之前,所以可以在构造器中改变state中的属性值并且可以渲染到页面中 setstate({})只有在挂载后使用 父到子props就是传递的当前组件的状态,子到父就是传递当前组件的实例方法也就是函数</p>
-<h2 id="无状态组件"><a href="#无状态组件" class="headerlink" title="无状态组件"></a>无状态组件</h2> <blockquote class="pullquote [class]"><p>无状态组件好处</p>
-</blockquote>无状态组件 &lt;====&gt; 纯组件sfc<br>1.使函数的方式声明,会使得代码的可读性更好  并能大大减少代码量<br>2.一般都会搭配高阶组件,高阶组件 简称 HOC<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span> </span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SwitchButton</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123; </span><br><span class="line"><span class="keyword">constructor</span>(props) &#123; <span class="keyword">super</span>(props) <span class="keyword">this</span>.state = &#123; <span class="attr">open</span>: <span class="keyword">this</span>.props.open &#125; <span class="keyword">this</span>.handleClick = <span class="keyword">this</span>.handleClick.bind(<span class="keyword">this</span>) &#125; </span><br><span class="line">handleClick(event) &#123; <span class="keyword">this</span>.setState(&#123; <span class="attr">open</span>: !<span class="keyword">this</span>.state.open &#125;) &#125; </span><br><span class="line">render() &#123; <span class="keyword">let</span> open = <span class="keyword">this</span>.state.open, className=open?<span class="string">'switch-buttonopen'</span> : <span class="string">'btn-switch'</span> </span><br><span class="line"><span class="keyword">return</span> ( &lt;label className=&#123;className&#125; onClick=&#123;this.handleClick&#125;&gt; </span><br><span class="line">&lt;input type="checkbox" checked=&#123;open&#125;/&gt; 男 &lt;/label&gt; ) &#125; &#125; </span><br><span class="line">SwitchButton.defaultProps = &#123; open: false &#125; ReactDOM.render( &lt;SwitchButton /&gt;, document.getElementById('root') )</span><br></pre></td></tr></table></figure>
-<p><a href="http://www.4399.com" target="_blank" rel="noopener">百度</a></p>
+        <h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><p>React就是函数的编程和嵌套this.state就是改变model层改变不了视图层 this.setstate修改model层 视图层也响应<br>语法要求：<br>    标签要闭合<br>    元素必须要有一个顶层元素<br>    变量首字母大写代表组件，小写对应是jsx元素<br>    html属性，小驼峰命名 tabindex -&gt; tabIndex</p>
+<p>精髓：多组件组合，jsx+函数式编程（运算写成一系列的函数嵌套）</p>
+<p>环境搭建：<br>    a)    webpack + webpack-dev-server<br>        / 指向 index所在位置，图片,数据 都指向 /<br>        js / css / jsx 相对定位</p>
+<pre><code>b) npm install create-react-app    -g   官方脚手架
+
+    参考:    https://facebook.github.io/create-react-app/docs/getting-started
+
+    目录解析:
+        manifest.json 生成一个网页的桌面快捷方式时，会以这个文件中的内容作为图标和文字的显示内容
+        registerServiceWorker.js
+            支持离线访问，所以用起来和原生app的体验很接近,只有打包生成线上版本的react项目时，registerServiceWorker.js才会有效。服务器必须采用https协议
+        对Internet Explorer 9,10和11的支持需要polyfill。
+
+    create-react-app 目录名| .
+    yarn start 开发模式
+    yarn build 打包
+
+    更改默认的端口号:
+    1.    node_modules\react-scripts\scripts
+    const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3001;
+
+    2.    yarn eject
+     修改script/start.js
+
+
+    本地资源导入(import) 不可以导入src之外的包
+
+    问题:    jsx前景图片, ./ 和 / 都指向了 public目录
+    解决：1.模块化导入 src目录里 要在jsx里src的图片
+          2.相对或者绝对导入public目录下的图片
+
+
+    去除eslint 警告：
+        yarn  eject
+        找到项目下config/webpack.config.dev|prod
+        注释关于eslint的导入和rules规则
+
+    打包 + 预览：
+        yarn build
+        serve -s build --port 端口 --open
+        serve 服务器命令行工具（npm i serve -g)
+
+        public目录里面的资源会直接copy到build目录，src里面的资源会打包模块化
+
+    help: https://github.com/facebook/create-react-app
+
+    解决方案:
+        项目资源，尽量从src目录下引入，打包时会模块化
+        图片资源模块化引入，如何来自库只能放到public目录下
+
+c) yeomen 目录        需要安装
+npm install
+npm run dev
+</code></pre><p>#组件<br>组件的state，相当于组件的记忆，其存在意义就是被改变，每一次通过this.setState函数修改state就改变了组件的状态，然后通过渲染过程把这种变化体现出来<br>Constructor 构造器跑在所有程序之前,所以可以在构造器中改变state中的属性值并且可以渲染到页面中 setstate({})只有在挂载后使用 父到子props就是传递的当前组件的状态,子到父就是传递当前组件的实例方法也就是函数<br>ES6 创建组件：<br>    import React from ‘react’;<br>    class 组件名 extends React.Component{<br>        constrctor(props){ //组件有状态 constrctor就出现<br>            super(props) //类如果有继承 super就要出现<br>                需要在组件构造器内处理传递过来的props时，props参数就出现</p>
+<pre><code>        this.state={ // 本地状态
+
+        }
+    }
+    render(){
+        return html|jsx
+    }
+    方法1(){} 实例方法
+    方法2(){}
+}
+</code></pre><p>ES5 创建组件：<br>    var React = require(‘react’);<br>    let 组件名 = React.createClass({<br>      getInitialState:function(){  //组件状态<br>          return {<br>              数据:值<br>          }<br>      }<br>      render:function(){<br>        return html|jsx<br>      }<br>    });</p>
+<p>使用组件：<br>    <helloworld><br>    <helloworld></helloworld></helloworld></p>
+<p>渲染（描画）页面<br>    import ReactDom from ‘react-dom’;<br>    var RactDom = require(‘react-dom’);</p>
+<pre><code>ReactDom.render(组件/dom,插入点)
+</code></pre><p>组件属性(props)：<br>    调用组件：&lt;组件名 属性名=值 属性名2=值2 .. /&gt;    传递属性<br>    组件内部: {this.props.属性名}   jsx表达式  使用属性<br>              this 代表的是组件本身</p>
+<pre><code>值类型：字符||{表达式}
+this.props.属性名==array 需要循环
+arr值：this.props.属性名.map(function(){
+    return html
+})
+json {json} 报错， 对象无法直接通过{obj}展示-&gt;{obj.key}
+</code></pre><h2 id="无状态组件"><a href="#无状态组件" class="headerlink" title="无状态组件"></a>无状态组件</h2> <blockquote class="pullquote [class]"><p>无状态组件好处</p>
+</blockquote>无状态组件 &lt;====&gt; 纯组件sfc<br>1.使函数的方式声明,会使得代码的可读性更好  并能大大减少代码量<br>2.一般都会搭配高阶组件,高阶组件 简称 HOC<br> ——————————————<br> 组件的状态<br>    (state|数据|封装状态|本地状态)<br><br>    getInitialState:fn(){return {状态名:值,xx:oo}}   ES5<br>    this.state={}  es6  名字定死state的实例属性<br>    获取状态：this.state.数据名<br>    修改状态: 1.this.state.数据名=值  修改model层，view响应会滞后  这是挂载后的情况<br>             2.this.setState({数据：值})  修改model层，view响应<br>             在构造器内部可以使用 1 ,不能使用2,  构造器阶段只是普通的类，而props、setState是组件成员<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span> </span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SwitchButton</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123; </span><br><span class="line"><span class="keyword">constructor</span>(props) &#123; <span class="keyword">super</span>(props) <span class="keyword">this</span>.state = &#123; <span class="attr">open</span>: <span class="keyword">this</span>.props.open &#125; <span class="keyword">this</span>.handleClick = <span class="keyword">this</span>.handleClick.bind(<span class="keyword">this</span>) &#125; </span><br><span class="line">handleClick(event) &#123; <span class="keyword">this</span>.setState(&#123; <span class="attr">open</span>: !<span class="keyword">this</span>.state.open &#125;) &#125; </span><br><span class="line">render() &#123; <span class="keyword">let</span> open = <span class="keyword">this</span>.state.open, className=open?<span class="string">'switch-buttonopen'</span> : <span class="string">'btn-switch'</span> </span><br><span class="line"><span class="keyword">return</span> ( &lt;label className=&#123;className&#125; onClick=&#123;this.handleClick&#125;&gt; </span><br><span class="line">&lt;input type="checkbox" checked=&#123;open&#125;/&gt; 男 &lt;/label&gt; ) &#125; &#125; </span><br><span class="line">SwitchButton.defaultProps = &#123; open: false &#125; ReactDOM.render( &lt;SwitchButton /&gt;, document.getElementById('root') )</span><br></pre></td></tr></table></figure>
+<h2 id="事件-驼峰命名-es6"><a href="#事件-驼峰命名-es6" class="headerlink" title="事件:驼峰命名  es6"></a>事件:驼峰命名  es6</h2><p>事件函数内部this会丢失<br>&lt;元素 onClick={this.方法} 事件要的是一个函数体</p>
+<p>修正this的指向<br>onClick={this.方法.bind(null,值)}<br>onClick={()=&gt;{this.方法()}}<br>this.方法=this.方法.bind(this) 构造器内部修正<br>方法(ev)    ev 代理事件对象 ev.target 返回虚拟dom </p>
+<h2 id="refs"><a href="#refs" class="headerlink" title="refs"></a>refs</h2><pre><code>获取jsx元素  获取的是真实dom
+    给jsx元素 设置ref属性=名字
+    this.refs.名字
+何时用:
+    处理focus、文本选择或者媒体播放
+    触发强制动画
+    集成第三方DOM库
+    通用组件
+</code></pre><p>受控元素： react 表单的value都是受控属性<br>    不受控属性  defaultValue<br>    受控属性 value<br>    react都是单向数据流</p>
+<pre><code>value={this.state.数据名}  model-&gt;view
+onChange={this.监听方法}   view-&gt;model(  setState )
+监听方法: this.setState(...)
+</code></pre><p>处理多个输入元素<br>    可以为每个元素添加一个 name 属性(通常和数据名一致)<br>    处理函数根据 event.target.name 的值来选择要做什么</p>
+<pre><code>name=&quot;inputUserName&quot; name=&quot;inputContent&quot;
+this.setState({[ev.target.name]:ev.target.value})
+</code></pre><p><strong>props类型检查</strong></p>
+<pre><code>需要安装  import propsTypes from &apos;prop-types&apos;
+
+默认值:        组件.defaultProps={propName:值}
+类型约定:    组件.propTypes={propsName:使用propsTypes库.类型名}
+
+    propsTypes库.类型名
+    propName: propsTypes.array/bool/func/number/object/string
+必传参数: propName: propsTypes库.类型名.isRequired
+</code></pre><p><a href="http://www.4399.com" target="_blank" rel="noopener">百度</a></p>
 <ul>
 <li>react总结</li>
 </ul>
